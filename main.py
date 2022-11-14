@@ -14,7 +14,7 @@ if user_input and button :
     answer_button = st.button('Спросить')
     exit_button = st.button('Закончить')
     if answer_button and answer_input:
-      answer = pipe(question=qu, context= text)
+      answer = pipe(question=answer_input, context= text)
       st.write(answer)
     elif exit_button:
       break
