@@ -10,33 +10,6 @@ Original file is located at
 """
 
 from transformers import pipeline
-
-fill_mask = pipeline("fill-mask", model = 'DeepPavlov/rubert-base-cased', tokenizer = 'DeepPavlov/rubert-base-cased')
-classifier = pipeline("sentiment-analysis", "blanchefort/rubert-base-cased-sentiment")
-
-def predict_next_word(text: str):
-  results  = fill_mask(text)
-  last_words = text.split(' ')[-10:]
-  last_words.append('»')
-  last_words.append('"')
-  last_words.append(')')
-  results = list(filter(lambda d:d['token_str'] not in last_words, results))
-  if len(results) == 0:
-    return text[:-8]
-  answer = max(results, key=lambda x:x['score'])
-  if len(answer['token_str']) == 1 and text[len(text) - 9] == answer['token_str']:
-    return text[:-9]
-  return answer['sequence'][:-1]
-
-newSentence = input()
-for ind in range(0, 50):
-  newSentence = newSentence +  f' {fill_mask.tokenizer.mask_token}.'
-  newSentence = predict_next_word(newSentence)
-print(newSentence)
-
-classifier(newSentence)
-
-from transformers import pipeline
 import wikipedia
 
 print('С кем хотите поговорить?')
