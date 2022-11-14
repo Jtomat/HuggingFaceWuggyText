@@ -9,8 +9,8 @@ Original file is located at
 Предварительно ставим всё, что надо
 """
 
-!pip install transformers
-!pip install torch pytorch_pretrained_bert deeppavlov
+pip install transformers
+pip install torch pytorch_pretrained_bert deeppavlov
 
 from transformers import pipeline
 
@@ -39,8 +39,8 @@ print(newSentence)
 
 classifier(newSentence)
 
-!pip install transformers;
-!pip install wikipedia;
+pip install transformers;
+pip install wikipedia;
 
 from transformers import pipeline
 import wikipedia
