@@ -1,3 +1,4 @@
+streamlit
 wikipedia~=1.4.0
 transformers~=4.24.0
 torch
