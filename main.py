@@ -9,9 +9,6 @@ Original file is located at
 Предварительно ставим всё, что надо
 """
 
-pip install transformers
-pip install torch pytorch_pretrained_bert deeppavlov
-
 from transformers import pipeline
 
 fill_mask = pipeline("fill-mask", model = 'DeepPavlov/rubert-base-cased', tokenizer = 'DeepPavlov/rubert-base-cased')
@@ -38,9 +35,6 @@ for ind in range(0, 50):
 print(newSentence)
 
 classifier(newSentence)
-
-pip install transformers;
-pip install wikipedia;
 
 from transformers import pipeline
 import wikipedia
