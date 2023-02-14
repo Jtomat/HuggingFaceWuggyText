@@ -20,9 +20,14 @@ pipe = pipeline("question-answering", model="AlexKay/xlm-roberta-large-qa"
 @app.get("/")
 def root(q: str = None):
     if q:
-        context = wikipedia.search(q)
-        print(context)
-        return {"result": "success", "data": context}
+        if q.strip() != "":
+            context = wikipedia.search(q)
+            if len(context) != 0:
+                return {"result": "success", "data": context}
+            else:
+                return {"result": "success",
+                        "message": "0 articles waw found"}
+
     return {"result": "error", "message": "add 'q' parameter to request"}
 
 
