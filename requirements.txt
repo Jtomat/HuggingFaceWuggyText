@@ -4,3 +4,4 @@ transformers~=4.24.0
 torch
 fastapi~=0.88.0
 pydantic~=1.10.2
+httpx
