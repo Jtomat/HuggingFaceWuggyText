@@ -31,3 +31,11 @@ def test_ask_keanu():
                           "%20Keanu%20Reeves")
     assert response.status_code == 200
     assert response.json()["data"]["answer"] == " \"absolutely charismatic"
+
+
+def test_check_russian_search():
+    response = client.get("/?q=Пушкин")
+    assert response.status_code == 200
+    answer = response.json()
+    assert answer["result"] == 'success'
+    assert 'Alexander Pushkin' in answer["data"]
