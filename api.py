@@ -3,7 +3,6 @@ from __future__ import annotations
 from fastapi import FastAPI
 from transformers import pipeline
 import wikipedia
-from typing import Union
 from pydantic import BaseModel
 
 
