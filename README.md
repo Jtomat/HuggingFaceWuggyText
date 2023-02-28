@@ -1,4 +1,4 @@
-# HuggingFaceWuggyText
+# HuggingFaceWuggyText *(Fork)*
 ### Приложение для общения с "человеком" по описанию из википедии.
 ### Описание:
 Приложение, написанное с использованием модели "AlexKay/xlm-roberta-large-qa-multilingual-finedtuned-ru" 
