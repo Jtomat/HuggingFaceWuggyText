@@ -6,3 +6,4 @@ fastapi~=0.88.0
 pydantic~=1.10.2
 httpx
 flake8
+translators~=5.5.6
