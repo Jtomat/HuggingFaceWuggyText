@@ -2,20 +2,21 @@
 from __future__ import annotations
 # Базовые импорты: апи-сервер, пайплайн, загрузщик вики
 from fastapi import FastAPI
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
 import wikipedia
 import translators.server as ts
-
-from models import QuestionWithTextModel
+from models import TextSummaryModel, QuestionWithTextModel
 
 # Создаем экземпляр сервера
 app = FastAPI()
-# Устанавливаем тип обработки для пайплайна
-classifier = pipeline("sentiment-analysis")
 # Загружаем модель question-answering
 pipe = pipeline("question-answering", model="AlexKay/xlm-roberta-large-qa"
                                             "-multilingual-finedtuned-ru")
 gpt2_pipe = pipeline('text-generation', model='gpt2')
+
+tokenizer = AutoTokenizer.from_pretrained("sshleifer/distilbart-cnn-12-6")
+abstract_text_model = AutoModelForSeq2SeqLM \
+    .from_pretrained("sshleifer/distilbart-cnn-12-6")
 
 
 @app.get("/")
@@ -67,6 +68,42 @@ def predict(title: str = None, question: str = None) -> dict:
     # Возвращаем ошибку, если что-то не было указано.
     return {"result": "error", "message": "lost some params"}
 
+
+
+@app.post("/make-text-abstract")
+def make_text_abstract(text_obj: TextSummaryModel):
+    """
+     Метод для получения реферерато по передаваемому тексту
+
+     :return объект ответа, где в свойстве data
+     содержится реферат в поле summary
+     """
+    text = text_obj.text
+    num_beams = text_obj.num_beams
+    min_length = text_obj.min_length
+    max_length = text_obj.max_length
+
+    if max_length < min_length:
+        return {"result": "error", "message": "property value  'max_length', "
+                                              "should be more than value of "
+                                              "property 'min_length'"}
+    if text and text != "":
+        inputs = tokenizer([text], max_length=1024,
+                           return_tensors="pt")
+
+        summary_ids = abstract_text_model\
+            .generate(inputs["input_ids"],
+                      num_beams=num_beams,
+                      min_length=min_length,
+                      max_length=max_length)
+
+        summary = tokenizer\
+            .batch_decode(summary_ids,
+                          skip_special_tokens=True,
+                          clean_up_tokenization_spaces=False)[0]
+
+        return {"result": "success", "data": {"summary": summary}}
+    return {"result": "error", "message": "property 'text' was missed"}
 
 @app.post("/find-answer")
 def find_answer_from_text(question_with_text: QuestionWithTextModel):
